@@ -1,10 +1,11 @@
-"use client"; // required for Leaflet in Next.js (App Router)
+"use client";
 
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { useState } from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
-// Fix Leaflet's default marker issue with Webpack/Next.js
+// Fix Leaflet marker issue
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://unpkg.com/leaflet/dist/images/marker-icon-2x.png",
@@ -12,11 +13,23 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet/dist/images/marker-shadow.png",
 });
 
+// Component to handle map clicks
+function LocationMarker({ setMarkers }) {
+  useMapEvents({
+    click(e) {
+      setMarkers((prev) => [...prev, e.latlng]); // add clicked position
+    },
+  });
+  return null;
+}
+
 export default function MapComponent() {
+  const [markers, setMarkers] = useState([]);
+
   return (
     <div style={{ height: "500px", width: "100%" }}>
       <MapContainer
-        center={[6.9271, 79.8612]} // Colombo as default
+        center={[6.9271, 79.8612]} // Colombo
         zoom={13}
         style={{ height: "100%", width: "100%" }}
       >
@@ -24,11 +37,20 @@ export default function MapComponent() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="© OpenStreetMap contributors"
         />
-        <Marker position={[6.9271, 79.8612]}>
-          <Popup>📍 Colombo, Sri Lanka</Popup>
-        </Marker>
+
+        {/* Handle clicks */}
+        <LocationMarker setMarkers={setMarkers} />
+
+        {/* Render markers */}
+        {markers.map((pos, i) => (
+          <Marker key={i} position={pos}>
+            <Popup>
+              📍 Marker {i + 1} <br />
+              Lat: {pos.lat.toFixed(4)}, Lng: {pos.lng.toFixed(4)}
+            </Popup>
+          </Marker>
+        ))}
       </MapContainer>
     </div>
   );
 }
-
