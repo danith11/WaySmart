@@ -89,7 +89,7 @@ export default function MapComponent() {
           onChange={(e) => setInput(e.target.value)}
           style={{ padding: "8px", width: "250px", marginRight: "10px" }}
         />
-        <button onClick={addLocation}>Add Location</button>
+        <button onClick={addLocation} className="p-5 border-2 border-red-500 rounded-lg">Add Location</button>
         <button onClick={getRoute} style={{ marginLeft: "5px" }}>Show Route</button>
         <button onClick={resetAll} style={{ marginLeft: "5px", background: "red", color: "white" }}>Reset</button>
       </div>
