@@ -19,12 +19,12 @@ const LoadingScreen = () => {
       transition={{ duration: 0.5 }} // How long the fade-out takes
     >
       <motion.h1
-        initial={{ opacity: 0, y: 100, scale: 0.3 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 2 }} 
-        className="text-7xl"
+        initial={{ opacity: 0, z: 100, scale: 0.3 }}
+        animate={{ opacity: 1, z: 0, scale: 1 }}
+        transition={{ duration: 1 }} 
+        className="text-7xl font-bold text-blue-950"
       >
-        Hello
+        WaySmart
       </motion.h1>
     </motion.div>
   );
