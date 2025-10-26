@@ -1,4 +1,7 @@
+"use client"
 import React from "react";
+import { motion } from "framer-motion";
+
 
 // 1. Define your data as an array of objects
 //    This makes it easy to add, remove, or change items later.
@@ -27,16 +30,20 @@ const Whywaysmart = () => {
   return (
     <div className="flex flex-col sm:flex-row justify-between items-center p-8 gap-10 w-full">
       {featuresData.map((feature) => (
-        <div key={feature.id} className="items-center text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 100 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          key={feature.id}
+          className="items-center text-center"
+        >
           <img
             src={feature.imgSrc}
-            alt={feature.alt} 
+            alt={feature.alt}
             className="w-full rounded-2xl opacity-80 hover:opacity-90 transition-all duration-75"
           />
-          <p className="mt-2 text-lg font-bold">
-            {feature.text} 
-          </p>
-        </div>
+          <p className="mt-2 text-lg font-bold">{feature.text}</p>
+        </motion.div>
       ))}
     </div>
   );
