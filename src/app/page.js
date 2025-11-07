@@ -1,9 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion"; // 1. Import motion and AnimatePresence
-import MapComponent from "./components/mapComponent";
 import Banner from "./components/Banner";
 import Whywaysmart from "./components/Whywaysmart";
 import LoadingScreen from "./components/LoadingScreen";
@@ -29,8 +27,7 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          {/* <MapComponent/> */}
+        >          
           <Banner />
           <Whywaysmart />
         </motion.div>
