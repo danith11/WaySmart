@@ -12,7 +12,7 @@ const Banner = () => {
           initial={{ opacity: 0, x: -100 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1 }}
-          className="text-4xl font-bold text-blue-500"
+          className=" text-4xl font-bold text-blue-500"
         >
           Welcome to WaySmart
         </motion.div>
@@ -37,7 +37,6 @@ const Banner = () => {
           them. Save time, fuel, and hassle.
         </p>
       </motion.div>
-      
     </div>
   );
 };
