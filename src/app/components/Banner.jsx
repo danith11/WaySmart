@@ -37,6 +37,7 @@ const Banner = () => {
           them. Save time, fuel, and hassle.
         </p>
       </motion.div>
+      
     </div>
   );
 };
