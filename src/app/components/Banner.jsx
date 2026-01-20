@@ -3,7 +3,6 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import Navbar from "./Navbar";
 
 const Banner = () => {
   return (
@@ -15,7 +14,7 @@ const Banner = () => {
         priority
         className="object-cover absolute inset-0"
       />
-      <div class="absolute inset-0 bg-black/30"></div>
+      <div className="absolute inset-0 bg-black/30"></div>
 
       <div className="relative z-10 flex flex-col gap-4 h-full items-center justify-center text-white">
         <motion.h1

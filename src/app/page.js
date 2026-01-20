@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion"; // 1. Import motion and AnimatePresence
 import Banner from "./components/Banner";
+import Whywaysmart from "./components/Whywaysmart";
 // import Whywaysmart from "./components/Whywaysmart";
 // import LoadingScreen from "./components/LoadingScreen";
 
@@ -29,6 +30,7 @@ export default function Home() {
           transition={{ duration: 0.5, delay: 0.2 }}
         >          
           <Banner />
+          <Whywaysmart/>
         </motion.div>
   //     )}
   //   </AnimatePresence>
