@@ -1,54 +1,67 @@
 "use client";
 
-import React from "react";
 import { useState, useEffect } from "react";
-import { NAV_LINKS } from "../constants";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { NAV_LINKS } from "../constants";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const isHome = pathname === "/";
 
-  // Handle scroll effect for navbar
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 10);
     };
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-  return (
-    <>
-      <nav
-        className={`relative w-full mt-5 z-30 transition-all duration-300 ${
-          scrolled ? "bg-white shadow-md" : "bg-white/80 backdrop-blur-sm"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16 ">
-          <div>
-            <Link href={"/"} className="text-[28px] font-bold text-blue-900">
-              WaySmart
-            </Link>
-          </div>
 
-          <div>
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.key}
-                href={link.href}
-                className="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-md font-medium transition duration-150"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
+  return (
+    <nav
+      className={`fixed top-0 left-0 z-50 w-full transition-all duration-300
+        ${
+          isHome
+            ? scrolled
+              ? "bg-white/70 backdrop-blur-md shadow"
+              : "bg-transparent"
+            : "bg-white shadow"
+        }
+      `}
+    >
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link
+          href="/"
+          className={`text-2xl font-bold ${
+            isHome && !scrolled ? "text-white" : "text-blue-900"
+          }`}
+        >
+          WaySmart
+        </Link>
+
+        <div className="flex gap-6">
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.key}
+              href={link.href}
+              className={`text-md font-medium transition
+                ${
+                  isHome && !scrolled
+                    ? "text-white hover:text-gray-300"
+                    : "text-gray-700 hover:text-blue-600"
+                }
+              `}
+            >
+              {link.label}
+            </Link>
+          ))}
         </div>
-      </nav>
-    </>
+      </div>
+    </nav>
   );
 };
 
 export default Navbar;
+

@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion"; // 1. Import motion and AnimatePresence
 import Banner from "./components/Banner";
 import Whywaysmart from "./components/Whywaysmart";
-import LoadingScreen from "./components/LoadingScreen";
+// import Whywaysmart from "./components/Whywaysmart";
+// import LoadingScreen from "./components/LoadingScreen";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -18,10 +19,10 @@ export default function Home() {
 
   return (
   
-    <AnimatePresence mode="wait">
-      {isLoading ? (
-        <LoadingScreen />
-      ) : (
+    // <AnimatePresence mode="wait">
+    //   {isLoading ? (
+    //     <LoadingScreen />
+    //   ) : (
         <motion.div
           key="main-content"
           initial={{ opacity: 0 }}
@@ -29,10 +30,10 @@ export default function Home() {
           transition={{ duration: 0.5, delay: 0.2 }}
         >          
           <Banner />
-          <Whywaysmart />
+          <Whywaysmart/>
         </motion.div>
-      )}
-    </AnimatePresence>
+  //     )}
+  //   </AnimatePresence>
   );
 }
 // "use client";
