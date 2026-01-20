@@ -1,42 +1,40 @@
 "use client";
 
 import React from "react";
-
+import Image from "next/image";
 import { motion } from "framer-motion";
+import Navbar from "./Navbar";
 
 const Banner = () => {
   return (
-    <div className="flex flex-col justify-between p-30 sm:flex-row gap-5">
-      <div className="flex flex-col">
-        <motion.div
-          initial={{ opacity: 0, x: -100 }}
-          animate={{ opacity: 1, x: 0 }}
+    <div className="relative h-screen w-full">
+      <Image
+        src="/bgImage.jpg"
+        alt="Background"
+        fill
+        priority
+        className="object-cover absolute inset-0"
+      />
+      <div class="absolute inset-0 bg-black/30"></div>
+
+      <div className="relative z-10 flex flex-col gap-4 h-full items-center justify-center text-white">
+        <motion.h1
+          initial={{ scale: 0.5 }}
+          animate={{ scale: 1 }}
           transition={{ duration: 1 }}
-          className=" text-4xl font-bold text-blue-500"
+          className="text-6xl md:text-9xl font-medium md:font-bold"
         >
-          Welcome to WaySmart
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, x: -100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-l font-light"
+          WaySmart
+        </motion.h1>
+        <motion.h1
+          initial={{ scale: 0.5 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 1 }}
+          className="text-2xl"
         >
           Smart Routes for Multi-Stop Journeys
-        </motion.div>
+        </motion.h1>
       </div>
-      <motion.div
-        initial={{ opacity: 0, x: 100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5 }}
-        className="max-w-full sm:max-w-1/2 "
-      >
-        <p className="text-l">
-          Planning a trip with multiple destinations? Just enter all your stops,
-          and WarSmart instantly calculates the most efficient order to visit
-          them. Save time, fuel, and hassle.
-        </p>
-      </motion.div>
     </div>
   );
 };
