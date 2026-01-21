@@ -11,8 +11,7 @@ const page = () => {
           Reach out to us
         </h3>
         <p className="text-black text-center mt-2 max-w-md mx-auto">
-          Ready to grow your brand? Let’s connect and build something
-          exceptional together.
+          Let’s connect and build something exceptional together.
         </p>
 
         <form className="grid sm:grid-cols-2 gap-3 sm:gap-5 max-w-2xl mx-auto text-black mt-16 w-full">
