@@ -27,13 +27,13 @@
 // export default MapPage;
 "use client";
 
-import { useEffect, useRef,useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
-export default function MapPageMap({ locations }) {
+export default function MapPageMap({ locations, drawRoute }) {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const [mappLoaded, setMapLoaded] = useState(false);
@@ -84,10 +84,56 @@ export default function MapPageMap({ locations }) {
     }
   }, [locations]);
 
+  //   Drawing the route
+  useEffect(() => {
+    if (!drawRoute || locations.length < 2) return;
+    const map = mapRef.current;
+
+    const getRoute = async () => {
+      const coordsString = locations
+        .filter(Boolean)
+        .map((c) => `${c[0]},${c[1]}`)
+        .join(";");
+
+      const res = await fetch(
+        `https://api.mapbox.com/directions/v5/mapbox/driving/${coordsString}?geometries=geojson&access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`,
+      );
+
+      const data = await res.json();
+      const route = data.routes[0].geometry;
+
+      if (map.getSource("route")) {
+        map.getSource("route").setData({
+          type: "Feature",
+          geometry: route,
+        });
+      } else {
+        map.addSource("route", {
+          type: "geojson",
+          data: {
+            type: "Feature",
+            geometry: route,
+          },
+        });
+
+        map.addLayer({
+          id: "route-layer",
+          type: "line",
+          source: "route",
+          paint: {
+            "line-color": "#2563eb",
+            "line-width": 5,
+          },
+        });
+      }
+    };
+    getRoute();
+  }, [drawRoute, locations]);
+
   return (
     <div
       ref={mapContainerRef}
-      className="min-h-screen w-full rounded-xl overflow-hidden"
+      className="-min-h-screen w-full rounded-xl overflow-hidden"
     />
   );
 }
