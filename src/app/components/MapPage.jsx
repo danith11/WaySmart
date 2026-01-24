@@ -27,7 +27,7 @@
 // export default MapPage;
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef,useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -36,6 +36,7 @@ mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 export default function MapPageMap({ locations }) {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
+  const [mappLoaded, setMapLoaded] = useState(false);
 
   useEffect(() => {
     if (mapRef.current) return;
@@ -48,6 +49,11 @@ export default function MapPageMap({ locations }) {
     });
 
     map.addControl(new mapboxgl.NavigationControl());
+
+    map.on("load", () => {
+      setMapLoaded(true);
+    });
+
     mapRef.current = map;
 
     return () => map.remove();
@@ -81,7 +87,7 @@ export default function MapPageMap({ locations }) {
   return (
     <div
       ref={mapContainerRef}
-      className="h-[500px] w-full rounded-xl overflow-hidden"
+      className="min-h-screen w-full rounded-xl overflow-hidden"
     />
   );
 }

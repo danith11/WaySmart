@@ -30,16 +30,16 @@ const LocationInput = ({index, onSelect}) => {
   };
 
   return (
-    <div className="relative w-full max-w-md">
+    <div className="relative w-full max-w-md bg-blue-100 justify-center">
       <input
         placeholder="Enter the location"
         type="text"
         value={query}
         onChange={handleChange}
-        className="w-full p-2 border rounded"
+        className="w-full p-3 border m-1 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
       />
       {suggestions.length > 0 && (
-        <ul className="absolute left-0 right-0 z-10 bg-white rounded top-full shadow-lg">
+        <ul className="absolute left-0 right-0 z-10 bg-white rounded-lg shadow border mt-1 max-h-48 overflow-y-auto">
           {suggestions.map((place) => (
             <li
               key={place.id}
