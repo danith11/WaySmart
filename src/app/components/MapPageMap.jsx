@@ -1,30 +1,3 @@
-// import React, { useState } from "react";
-// import LocationInput from "./LocationInput";
-// import MapPageMap from "../app/show-map/page";
-
-// const MapPage = () => {
-//   const [locations, setLocations] = useState([]);
-//   const handleSelect = (index, coordinates) => {
-//     const newLocations = [...locations];
-//     newLocations[index] = coordinates;
-//     setLocations(newLocations);
-//   };
-
-//   return (
-//     <div>
-//       <h1>Optimize Your Route</h1>
-//       {[...Array(6)].map((_, i) => (
-//         <LocationInput key={i} index={i} onSelect={handleSelect} />
-//       ))}
-
-//       <div>
-//         <MapPageMap locations={locations} />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default MapPage;
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -133,7 +106,7 @@ export default function MapPageMap({ locations, drawRoute }) {
   return (
     <div
       ref={mapContainerRef}
-      className="-min-h-screen w-full rounded-xl overflow-hidden"
+      className="min-h-screen w-full rounded-xl overflow-hidden"
     />
   );
 }
