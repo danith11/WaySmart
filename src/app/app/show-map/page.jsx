@@ -7,6 +7,7 @@ import MapPageMap from "@/app/components/MapPageMap";
 const MapPage = () => {
   const [locations, setLocations] = useState([]);
   const [drawRoute, setDrawRoute] = useState(false);
+  const [routeInfo, setRouteInfo] = useState(null);
 
   const handleSelect = (index, coordinates) => {
     const newLocations = [...locations];
@@ -17,7 +18,7 @@ const MapPage = () => {
   return (
     <div className="relative h-screen w-full">
       <div className="absolute inset-0 z-0">
-        <MapPageMap locations={locations} drawRoute={drawRoute}/>
+        <MapPageMap locations={locations} drawRoute={drawRoute} onRouteInfo={setRouteInfo}/>
       </div>
 
       <div className="absolute z-10 flex items-start justify-center  md:justify-start pt-10 w-1/4">
@@ -34,6 +35,18 @@ const MapPage = () => {
           >
             Optimize Route
           </button>
+          {routeInfo && (
+            <div className="pt-3 border-t text-sm space-y-1">
+            <p>
+              📏 Distance:{" "}
+              <b>{(routeInfo.distance / 1000).toFixed(2)} km</b>
+            </p>
+            <p>
+              ⏱ Time:{" "}
+              <b>{(routeInfo.duration / 60).toFixed(1)} mins</b>
+            </p>
+          </div>
+          )}
         </div>
       </div>
     </div>

@@ -6,10 +6,10 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
-export default function MapPageMap({ locations, drawRoute }) {
+export default function MapPageMap({ locations, drawRoute, onRouteInfo }) {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
-  const [mappLoaded, setMapLoaded] = useState(false);
+  const [mapLoaded, setMapLoaded] = useState(false);
 
   useEffect(() => {
     if (mapRef.current) return;
@@ -34,7 +34,7 @@ export default function MapPageMap({ locations, drawRoute }) {
 
   // Add markers when locations change
   useEffect(() => {
-    if (!mapRef.current) return;
+    if (!mapRef.current || !mapLoaded) return;
 
     // Remove old markers
     mapRef.current.markers?.forEach((m) => m.remove());
@@ -59,7 +59,7 @@ export default function MapPageMap({ locations, drawRoute }) {
 
   //   Drawing the route
   useEffect(() => {
-    if (!drawRoute || locations.length < 2) return;
+    if (!drawRoute || locations.length < 2 || !mapLoaded) return;
     const map = mapRef.current;
 
     const getRoute = async () => {
@@ -73,20 +73,23 @@ export default function MapPageMap({ locations, drawRoute }) {
       );
 
       const data = await res.json();
-      const route = data.routes[0].geometry;
+      const routeData = data.routes[0];
 
+      onRouteInfo({
+        distance: routeData.distance,
+        duration: routeData.duration,
+      });
+
+      const geojson = {
+        type: "Feature",
+        geometry: routeData.geometry,
+      };
       if (map.getSource("route")) {
-        map.getSource("route").setData({
-          type: "Feature",
-          geometry: route,
-        });
+        map.getSource("route").setData(geojson);
       } else {
         map.addSource("route", {
           type: "geojson",
-          data: {
-            type: "Feature",
-            geometry: route,
-          },
+          data: geojson,
         });
 
         map.addLayer({
@@ -101,7 +104,7 @@ export default function MapPageMap({ locations, drawRoute }) {
       }
     };
     getRoute();
-  }, [drawRoute, locations]);
+  }, [drawRoute, locations, onRouteInfo]);
 
   return (
     <div
