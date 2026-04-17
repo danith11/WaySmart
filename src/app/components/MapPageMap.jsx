@@ -6,7 +6,12 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
-export default function MapPageMap({ locations, drawRoute, onRouteInfo }) {
+export default function MapPageMap({
+  locations,
+  drawRoute,
+  onRouteInfo,
+  routeMode,
+}) {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const [mapLoaded, setMapLoaded] = useState(false);
@@ -62,17 +67,100 @@ export default function MapPageMap({ locations, drawRoute, onRouteInfo }) {
     if (!drawRoute || locations.length < 2 || !mapLoaded) return;
     const map = mapRef.current;
 
+const getRoute = async () => {
+  const validLocations = locations.filter(Boolean);
+  if (validLocations.length < 2) return;
+
+  const coordsString = validLocations
+    .map((c) => `${c[0]},${c[1]}`)
+    .join(";");
+
+  let profile = "driving";
+  let extraParams = "";
+
+  if (routeMode === "bike") {
+    profile = "driving";
+    extraParams = "&exclude=motorway";
+  }
+
+  const url = `https://api.mapbox.com/optimized-trips/v1/mapbox/${profile}/${coordsString}?geometries=geojson&roundtrip=false&source=first&destination=last${extraParams}&access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`;
+
+  const res = await fetch(url);
+  const data = await res.json();
+
+  console.log("API RESPONSE:", data);
+
+  console.log("Optimized response:", data);
+
+  if (!data.trips || !data.trips.length) {
+    console.error("No optimized route:", data);
+    return;
+  }
+
+  const routeData = data.trips[0];
+
+  onRouteInfo({
+    distance: routeData.distance,
+    duration: routeData.duration,
+  });
+
+  const geojson = {
+    type: "Feature",
+    geometry: routeData.geometry,
+  };
+
+  if (map.getSource("route")) {
+    map.getSource("route").setData(geojson);
+  } else {
+    map.addSource("route", {
+      type: "geojson",
+      data: geojson,
+    });
+
+    map.addLayer({
+      id: "route-layer",
+      type: "line",
+      source: "route",
+      paint: {
+        "line-color": "#16a34a",
+        "line-width": 5,
+      },
+    });
+  }
+};
+
+
     // const getRoute = async () => {
-    //   const coordsString = locations
-    //     .filter(Boolean)
+    //   const validLocations = locations.filter(Boolean);
+
+    //   if (validLocations.length < 2) return;
+
+    //   const coordsString = validLocations
     //     .map((c) => `${c[0]},${c[1]}`)
     //     .join(";");
 
+    //   let profile = "driving";
+    //   let extraParams = "";
+
+    //   if (routeMode === "bike") {
+    //     profile = "driving"; // still driving
+    //     extraParams = "&exclude=motorway"; // avoid highways
+    //   }
+    //   // const res = await fetch(
+    //   //   `https://api.mapbox.com/optimized-trips/v1/mapbox/${profile}/${coordsString}?geometries=geojson&roundtrip=false&source=first&destination=last&access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`,
+    //   // );
+
     //   const res = await fetch(
-    //     `https://api.mapbox.com/optimized-trips/v1/mapbox/driving/${coordsString}?geometries=geojson&roundtrip=false&source=first&destination=last&access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`,
+    //     `https://api.mapbox.com/optimized-trips/v1/mapbox/${profile}/${coordsString}?geometries=geojson&roundtrip=false&source=first&destination=last${extraParams}&access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`,
     //   );
 
     //   const data = await res.json();
+
+    //   if (!data.trips || !data.trips.length) {
+    //     console.error("No optimized route:", data); 
+    //     return;    
+    //   }
+
     //   const routeData = data.trips[0];
 
     //   onRouteInfo({
@@ -80,12 +168,17 @@ export default function MapPageMap({ locations, drawRoute, onRouteInfo }) {
     //     duration: routeData.duration,
     //   });
 
-    //   console.log("Optimized order:", data.waypoints.map(w => w.waypoint_index));
+    //   // const geojson = {
+    //   //   type: "Feature",
+    //   //   geometry: routeData.geometry,
+    //   // };
 
     //   const geojson = {
     //     type: "Feature",
+    //     properties: {},
     //     geometry: routeData.geometry,
     //   };
+
     //   if (map.getSource("route")) {
     //     map.getSource("route").setData(geojson);
     //   } else {
@@ -99,72 +192,15 @@ export default function MapPageMap({ locations, drawRoute, onRouteInfo }) {
     //       type: "line",
     //       source: "route",
     //       paint: {
-    //         "line-color": "#2563eb",
+    //         "line-color": "#16a34a",
     //         "line-width": 5,
     //       },
     //     });
     //   }
     // };
 
-    const getRoute = async () => {
-      const validLocations = locations.filter(Boolean);
-
-      if (validLocations.length < 2) return;
-
-      const coordsString = validLocations
-        .map((c) => `${c[0]},${c[1]}`)
-        .join(";");
-
-      const res = await fetch(
-        `https://api.mapbox.com/optimized-trips/v1/mapbox/driving/${coordsString}?geometries=geojson&roundtrip=false&source=first&destination=last&access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`,
-      );
-
-      const data = await res.json();
-
-      if (!data.trips || !data.trips.length) {
-        console.error("No optimized route:", data);
-        return;
-      }
-
-      const routeData = data.trips[0];
-
-      onRouteInfo({
-        distance: routeData.distance,
-        duration: routeData.duration,
-      });
-
-      const geojson = {
-        type: "Feature",
-        geometry: routeData.geometry,
-      };
-
-      if (map.getSource("route")) {
-        map.getSource("route").setData(geojson);
-      } else {
-        map.addSource("route", {
-          type: "geojson",
-          data: geojson,
-        });
-
-        map.addLayer({
-          id: "route-layer",
-          type: "line",
-          source: "route",
-          paint: {
-            "line-color": "#16a34a",
-            "line-width": 5,
-          },
-        });
-      }
-    };
-
     getRoute();
-  }, [drawRoute, locations, onRouteInfo]);
+  }, [drawRoute, locations, onRouteInfo, routeMode]);
 
-  return (
-    <div
-      ref={mapContainerRef}
-      className=" w-full h-full"
-    />
-  );
+  return <div ref={mapContainerRef} className=" w-full h-full" />;
 }

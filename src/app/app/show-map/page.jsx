@@ -8,6 +8,7 @@ const MapPage = () => {
   const [locations, setLocations] = useState([null, null]);
   const [drawRoute, setDrawRoute] = useState(false);
   const [routeInfo, setRouteInfo] = useState(null);
+  const [routeMode, setRouteMode] = useState("car");
 
   const handleSelect = (index, coordinates) => {
     const newLocations = [...locations];
@@ -22,6 +23,7 @@ const MapPage = () => {
           locations={locations}
           drawRoute={drawRoute}
           onRouteInfo={setRouteInfo}
+          routeMode ={routeMode}
         />
       </div>
 
@@ -32,6 +34,11 @@ const MapPage = () => {
           {locations.map((_, i) => (
             <LocationInput key={i} index={i} onSelect={handleSelect} />
           ))}
+
+          <div className="flex gap-2 justify-center">
+            <button onClick={() => setRouteMode("car")}>Car</button>
+            <button onClick={()=>setRouteMode("bike")}>Bike</button>
+          </div>
 
           <button
             onClick={() => setDrawRoute(true)}

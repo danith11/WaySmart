@@ -9,6 +9,11 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const isAuthPage = pathname === "/login" || pathname === "/signup";
+
+  if (isAuthPage) {
+    return null;
+  }
 
   useEffect(() => {
     const handleScroll = () => {
