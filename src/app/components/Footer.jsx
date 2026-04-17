@@ -1,6 +1,15 @@
+"use client";
 import React from "react";
+import { usePathname } from "next/navigation";
 
 const Footer = () => {
+  const pathname = usePathname();
+  const isAuthPage = pathname === "/login" || pathname === "/signup";
+
+  if (isAuthPage) {
+    return null;
+  }
+
   return (
     <div>
       {/* <footer className="w-full bg-gradient-to-b from-[#ffffff] via-5% to-[#e1f0fd] text-[#000000]">
