@@ -2,9 +2,9 @@ import { CiUser, CiLock } from "react-icons/ci";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 to-blue-100">
+    <div className="min-h-screen flex items-center justify-center bg-blue-50">
       {/* Card */}
-      <div className="bg-white/10 backdrop-blur-sm shadow-2xl rounded-2xl flex overflow-hidden min-h-[600px] w-[900px]">
+      <div className="bg-black/5 shadow-2xl rounded-2xl flex overflow-hidden min-h-[600px] w-[900px]">
         {/* Left Side */}
         <div className="w-1/2 bg-blue-900  text-white flex flex-col justify-center items-center p-20">
           <h1 className="text-5xl font-bold mb-4">WaySmart</h1>
