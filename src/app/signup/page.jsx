@@ -2,13 +2,15 @@
 
 import { CiUser, CiLock } from "react-icons/ci";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-
 import { useState } from "react";
 
 export default function SignupPage() {
   const [isVisible, setVisible] = useState(false);
+  const handleClick = () => {
+    setVisible(!isVisible);
+  };
   return (
-    <div className="min-h-screen flex justify-center items-center bg-blue-100">
+    <div className="min-h-screen flex justify-center items-center bg-blue-50">
       <div className="flex min-h-[600px] w-[900px] bg-black/5 shadow-2xl rounded-2xl overflow-hidden">
         <div className="w-1/2 p-10 flex flex-col justify-center">
           <h2 className="text-3xl font-bold mb-8 text-gray-800 text-center">
@@ -26,19 +28,35 @@ export default function SignupPage() {
           <div className="flex items-center  rounded-lg px-3 py-2 mb-4 bg-gray-50">
             <CiLock className="text-xl text-gray-500" />
             <input
-              type="password"
+              type={isVisible ? 'text' : 'password'}
               placeholder="Enter a Password"
               className="ml-2 w-full bg-transparent outline-none"
             />
+            {isVisible ? (
+              <FiEye className="text-xl text-gray-500" onClick={handleClick} />
+            ) : (
+              <FiEyeOff
+                className="text-xl text-gray-500"
+                onClick={handleClick}
+              />
+            )}
           </div>
 
           <div className="flex items-center  rounded-lg px-3 py-2 mb-4 bg-gray-50">
             <CiLock className="text-xl text-gray-500" />
             <input
-              type="password"
+              type={isVisible ? 'text' : 'password'}
               placeholder="Re-Enter the Password"
               className="ml-2 w-full bg-transparent outline-none"
             />
+            {isVisible ? (
+              <FiEye className="text-xl text-gray-500" onClick={handleClick} />
+            ) : (
+              <FiEyeOff
+                className="text-xl text-gray-500"
+                onClick={handleClick}
+              />
+            )}
           </div>
 
           <button className="w-full bg-blue-900 text-white py-2 rounded-lg hover:bg-blue-800 transition font-semibold">

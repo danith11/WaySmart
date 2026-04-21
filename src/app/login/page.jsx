@@ -1,6 +1,16 @@
+"use client";
+
 import { CiUser, CiLock } from "react-icons/ci";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+import { useState } from "react";
 
 export default function LoginPage() {
+  const [isVisible, setVisible] = useState(false);
+
+  const handleClick = () => {
+    setVisible(!isVisible);
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-blue-50">
       {/* Card */}
@@ -33,10 +43,18 @@ export default function LoginPage() {
           <div className="flex items-center  rounded-lg px-3 py-2 mb-6 bg-gray-50 ">
             <CiLock className="text-xl text-gray-500" />
             <input
-              type="password"
+              type={isVisible ? "text" : "password"}
               placeholder="Password"
               className="ml-2 w-full bg-transparent outline-none"
             />
+            {isVisible ? (
+              <FiEye className="text-xl text-gray-500" onClick={handleClick} />
+            ) : (
+              <FiEyeOff
+                className="text-xl text-gray-500"
+                onClick={handleClick}
+              />
+            )}
           </div>
 
           {/* Button */}
